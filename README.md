@@ -1,43 +1,42 @@
-# Automated Physics Simulation & V&V Test Pipeline
-[![Physics Pipeline CI](https://github.com)](https://github.com)
+# 3D Brownian Diffusion Pipeline & V&V Framework
 
-A high-performance 3D parallel physics engine evaluating stochastic Brownian molecular diffusion under external aerodynamic drift (wind fields). This repository is built as a Test Automation framework utilizing Verification and Validation (V&V) principles to verify numerical simulation integrity against mathematical laws.
+This repository contains a multi-threaded Julia engine that simulates 3D stochastic Brownian molecular diffusion subjected to external aerodynamic wind drift. 
 
-## 🌟 Simulation Preview
-![3D Molecular Cloud Expansion](report/images/diffusion_3d_demo1.gif) 
+Instead of traditional unit testing, this project implements a rigorous Verification & Validation (V&V) automation framework to mathematically audit the integrity of the stochastic simulation against established physics laws.
+
+## 📊 Simulation Preview
+![3D Molecular Cloud Expansion](report/images/diffusion_3d_demo1.gif)
 ![3D Molecular Cloud Expansion with Wind Drift](report/images/diffusion_3d_demo2.gif)
 
-## 🛠️ Tech Stack & Architecture
-* **Language**: Julia 1.10+ (Native multi-threading optimization)
-* **CI/CD Platform**: GitHub Actions DevOps
-* **Graphics Engine**: CairoMakie.jl (High-performance vector rendering)
-* **CLI Framework**: ArgParse.jl (Type-safe parameter parsing)
+## 🛠️ Architecture & Core Dependencies
+* **Core Engine:** Julia 1.10+ (leveraging native multi-threading for particle step updates)
+* **Graphics:** CairoMakie.jl (used for vector-rendered data visualization)
+* **CLI Interface:** ArgParse.jl (type-safe boundary input management)
 
-## 🧬 Automated Verification & Validation (V&V) Framework
-Unlike standard deterministic software unit tests, a stochastic Monte Carlo model requires physical and statistical assertions. The test suite (`test/runtests.jl`) validates code execution via three layers:
+## 🧬 The V&V Testing Strategy (`test/runtests.jl`)
+Testing a stochastic Monte Carlo model requires statistical assertions rather than static expected outputs. Our pipeline executes three specific validation gates:
 
-1. **Numerical Cleanliness**: Asserts array dimensional shapes and verifies that no mathematical operations result in data corruption (`NaN` or `Inf`).
-2. **Physical Boundary Invariance**: Asserts that all particles initialize strictly at the origin $(0,0,0)$ and that step variations comply with kinematic limits.
-3. **Statistical Ensemble Validation**: 
-   * Tracks **Spatial Isotropy** to verify uniform thermal dispersion across axes within a $15\%$ variance threshold.
-   * Dynamically calculates the **Mean Squared Displacement (MSD)** using the core thermodynamic equation:
+1. **Numerical Sanity:** Catches matrix dimension mismatches and actively scans arrays to ensure no floating-point operations return `NaN` or `Inf`.
+2. **Kinematic Bounds:** Verifies all particle vectors strictly initiate at the origin $(0,0,0)$ and that consecutive spatial step delta limits are physically constrained.
+3. **Statistical Invariance:** 
+   * **Spatial Isotropy:** Confirms uniform multi-axis thermal dispersion remains within a strict 15% variance ceiling.
+   * **Analytical Convergence:** Dynamically cross-references empirical simulation outputs against the core Mean Squared Displacement (MSD) textbook solution:
      $$MSD = 2dDt + (v_{wind} \cdot t)^2$$
-     The pipeline automatically aborts the visualization render if empirical simulation data drifts from this analytical textbook truth.
+     If empirical data drifts past the analytical threshold, the pipeline automatically aborts the image rendering stage to prevent corrupted visual reports.
 
-## 🚀 Getting Started & Local CLI Usage
-This project behaves as a fully decoupled command-line interface tool. You can loop over scenarios from outside the scripts using the bash runner.
+## 🚀 Execution Guide
+The engine functions as a decoupled CLI tool. You can pass arbitrary parameters or batch-loop scenarios via the shell wrapper.
 
 ```bash
-# Clone the repository
+# Setup
 git clone git@github.com:PGComplexSystems/3dDiffusion.git
 cd 3dDiffusion
 
-# Execute a custom scenario: ./run_pipeline.sh <STEPS> <PARTICLES> <WIND_SPEED>
+# Syntax: ./run_pipeline.sh <STEPS> <PARTICLES> <WIND_SPEED>
 ./run_pipeline.sh 1600 300 2.5
 ```
 
-## 🗺️ Feature Roadmap
-* [ ] **External Configuration**: Migrate hardcoded script arguments into a centralized `config.toml` file.
-* [ ] **Dynamic Visualization Labels**: Embed active simulation parameters (Wind Speed, Particle Count) directly into the CairoMakie plot titles.
-* [ ] **GitHub Actions Integration**: Automate the V&V test suite execution on every pull request.
-* [ ] **Dead Link Protection**: Add an automated repository step to catch broken media paths before deployment.
+## 📈 Planned System Updates
+* [ ] Shift runtime arguments to a standalone `config.toml` parser.
+* [ ] Dynamically bake input metrics directly into CairoMakie plot headers.
+* [ ] Set up a GitHub Actions workflow to run the V&V suite on push events.
