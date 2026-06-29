@@ -28,8 +28,8 @@ This project behaves as a fully decoupled command-line interface tool. You can l
 
 ```bash
 # Clone the repository
-git clone https://github.com
-cd YOUR_REPO
+git clone git@github.com:PGComplexSystems/3dDiffusion.git
+cd 3dDiffusion
 
 # Execute a custom scenario: ./run_pipeline.sh <STEPS> <PARTICLES> <WIND_SPEED>
 ./run_pipeline.sh 1600 300 2.5
