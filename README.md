@@ -34,3 +34,5 @@ cd 3dDiffusion
 # Execute a custom scenario: ./run_pipeline.sh <STEPS> <PARTICLES> <WIND_SPEED>
 ./run_pipeline.sh 1600 300 2.5
 ```
+
+features to add: config file, parameters in plot 
