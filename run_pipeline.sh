@@ -4,9 +4,9 @@ set -e
 # Accept outside parameters or fallback to defaults
 # very small step and particle count to keep repo light
 #
-STEPS=${1:-100}
-PARTICLES=${2:-100}
-WIND_SPEED=${3:-1}
+STEPS=${1:-500}
+PARTICLES=${2:-5000}
+WIND_SPEED=${3:-0}
 
 echo "=========================================="
 echo "LAUNCHING PRODUCTION TESTING LOOP"

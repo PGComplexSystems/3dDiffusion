@@ -26,10 +26,8 @@ println("[2/3 Plotting] Initiating Makie Cinematic Dark-Theme Render...")
 points = Observable(Point3f.(results[1, :, 1], results[1, :, 2], results[1, :, 3]))
 colors = Observable(zeros(num_particles))
 
-# FIX 1: Set figure background to a clean, dark slate black
 fig = Figure(resolution = (1000, 1000), figure_padding = 0, backgroundcolor = "#0B0C10")
 
-# FIX 2: Modernize the 3D grid layout with glowing dark properties
 ax = Axis3(fig[1, 1], 
            title = "3D Molecular Cloud Expansion", 
            titlecolor = :white,
@@ -43,12 +41,15 @@ ax = Axis3(fig[1, 1],
            xgridcolor = "#45A29E", ygridcolor = "#45A29E", zgridcolor = "#45A29E", # Subdued teal grid lines
            xticklabelcolor = :gray, yticklabelcolor = :gray, zticklabelcolor = :gray)
 
-# FIX 3: Switched to ':inferno' colormap for an explosive hot neon core look
+max_distance = maximum([norm(results[end, p, :]) for p in 1:num_particles])
+
 scatter!(ax, points, 
          color = colors, 
          colormap = :inferno, 
-         markersize = 10, # Slightly increased for presence against black background
+         colorrange = (-max_distance * 0.4, max_distance), # Shift the floor below 0 to skip the dark colors!
+         markersize = 10, 
          alpha = 0.85)
+
 
 println("[2/3 Plotting] Rendering dark-mode 3D frames into MP4...")
 
@@ -58,7 +59,7 @@ pbar = Progress(length(frame_range), desc="Rendering Video: ", color=:cyan)
 record(fig, joinpath(@__DIR__, "..", "report", "images", "diffusion_3d.mp4"), frame_range; fps = 30) do t
     points[] = Point3f.(results[t, :, 1], results[t, :, 2], results[t, :, 3])
     colors[] = [norm(results[t, p, :]) for p in 1:num_particles]
-    ax.azimuth[] = 0.5 * (t * 0.002) # Keeps your newly updated smooth camera rotation
+    ax.azimuth[] = 3 * (t * 0.000) # Keeps your newly updated smooth camera rotation
     next!(pbar)
 end
 
