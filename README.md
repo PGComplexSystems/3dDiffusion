@@ -4,7 +4,7 @@
 A high-performance 3D parallel physics engine evaluating stochastic Brownian molecular diffusion under external aerodynamic drift (wind fields). This repository is built as a Test Automation framework utilizing Verification and Validation (V&V) principles to verify numerical simulation integrity against mathematical laws.
 
 ## 🌟 Simulation Preview
-![3D Molecular Cloud Expansion](report/images/diffusion_3d.gif)
+![3D Molecular Cloud Expansion](report/images/diffusion_3d_demo1.gif) ![3D Molecular Cloud Expansion with winds](report/images/diffusion_3d_demo2.gif)
 
 ## 🛠️ Tech Stack & Architecture
 - **Language**: Julia 1.10+ (Native multi-threading optimization)
